@@ -33,9 +33,6 @@ typedef struct{
 //Keeps track of how much of heap has been used so far
 extern char heap[CAPACITY];
 
-//Tracks heap_size <= CAPACITY (640k Bytes)
-extern size_t heap_size;
-
 extern size_t heap_alloced_amount; //The number of allocated chunks
 extern size_t heap_freed_amount; //The number of the freed chunks
 
@@ -48,6 +45,7 @@ int chunk_list_find(const Chunk_List* list, void* ptr);
 void chunk_list_insert(Chunk_List * list, void* ptr, size_t size);
 void chunk_list_remove(Chunk_List* list, size_t index);
 void chunk_list_display_chunks(const Chunk_List* list);
+void chunk_list_merge(Chunk_List * dest, const Chunk_List * src);
 
 void *heap_alloc(size_t size);
 void heap_free(void *ptr);

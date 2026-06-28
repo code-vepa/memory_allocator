@@ -5,7 +5,11 @@ int chunk_start_compare(const void *ptr1, const void *ptr2){
 	const Heap_Chunk * a_chunk = ptr1;
 	const Heap_Chunk * b_chunk = ptr2;
 
-	return a_chunk->start - b_chunk->start;
+	if (a_chunk->start < b_chunk->start)
+        return -1;
+    if (a_chunk->start > b_chunk->start)
+        return 1;
+    return 0;
 }
 
 int chunk_list_find(const Chunk_List* list, void* ptr){
@@ -55,4 +59,22 @@ void chunk_list_display_chunks(const Chunk_List* list){
 			list->chunks[i].start, 
 			list->chunks[i].size);
 	} 
+}
+
+void chunk_list_merge(Chunk_List* dest, const Chunk_List * src){
+	dest->count = 0;
+	
+	for(size_t i = 0; i < src->count; ++i){
+		const Heap_Chunk chunk = src->chunks[i];
+
+		if(dest->count > 0){
+			Heap_Chunk *last = &dest->chunks[dest->count - 1];
+
+			if(last->start + last->size == chunk.start){
+				last->size += chunk.size;
+				continue;
+			}
+		}
+		chunk_list_insert(dest, chunk.start, chunk.size);
+	}
 }
