@@ -18,7 +18,7 @@ int chunk_list_find(const Chunk_List* list, void* ptr){
 
 	if(result != 0){
 		assert(list->chunks <= result);
-		return (result - list->chunks) / sizeof(list->chunks[0]);
+		return result - list->chunks;
 	}
 	else return -1;
 }
@@ -50,7 +50,7 @@ void chunk_list_remove(Chunk_List* list, size_t index){
 }
 
 void chunk_list_display_chunks(const Chunk_List* list){
-	for(int i = 0; i < list->count; ++i){
+	for(size_t i = 0; i < list->count; ++i){
 		printf("\tstart: %p,\tsize: %zu\n",
 			list->chunks[i].start, 
 			list->chunks[i].size);

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #define CAPACITY 640000
 #define ALLOCED_CAP 1024

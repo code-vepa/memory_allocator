@@ -19,7 +19,7 @@ void* heap_alloc(size_t size){
 	return ptr;
 }
 
-void head_free(void* ptr){
+void heap_free(void* ptr){
 	const int index = chunk_list_find(&alloced_chunks, ptr); 
 	assert(index >= 0);
 	chunk_list_insert(&dealloced_chunks, alloced_chunks.chunks[index].start,
