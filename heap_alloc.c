@@ -34,6 +34,20 @@ void* heap_alloc(size_t size){
 	return NULL; // out of memory or 0 sized
 }
 
+
+void* heap_calloc(size_t count, size_t size){
+	if(count != 0 && size > SIZE_MAX / count) 
+	return NULL;
+
+	size_t total = count * size;
+	void* result = heap_alloc(total);
+
+	if(result != NULL)
+		memset(result, 0, total);
+	
+	return result;
+}
+
 void heap_free(void* ptr){
 	if(ptr != NULL){
 		const int index = chunk_list_find(&alloced_chunks, ptr); 
