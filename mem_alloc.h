@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #define CAPACITY 640000
 #define ALLOCED_CAP 1024
