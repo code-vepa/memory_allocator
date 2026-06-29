@@ -78,3 +78,9 @@ void chunk_list_merge(Chunk_List* dest, const Chunk_List * src){
 		chunk_list_insert(dest, chunk.start, chunk.size);
 	}
 }
+
+void coalesce_free_chunks(void){
+	Chunk_List merged = {0};
+	chunk_list_merge(&merged, &dealloced_chunks);
+	dealloced_chunks = merged;
+}

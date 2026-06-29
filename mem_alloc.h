@@ -49,6 +49,8 @@ void chunk_list_remove(Chunk_List* list, size_t index);
 void chunk_list_display_chunks(const Chunk_List* list);
 void chunk_list_merge(Chunk_List * dest, const Chunk_List * src);
 
+void coalesce_free_chunks(void);
+
 void* heap_alloc(size_t size);
 void* heap_realloc(void* ptr, size_t size);
 void* heap_calloc(size_t count, size_t size);

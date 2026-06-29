@@ -48,6 +48,52 @@ void* heap_calloc(size_t count, size_t size){
 	return result;
 }
 
+void* heap_realloc(void* ptr, size_t size){
+	if(ptr == NULL)
+		return heap_alloc(size);
+
+	if(size == 0){
+		heap_free(ptr);
+		return NULL;
+	}
+
+	int index = chunk_list_find(&alloced_chunks, ptr);
+	assert(index >= 0);
+	Heap_Chunk *chunk = &alloced_chunks.chunks[index];
+
+	//if the given size is the same as the current size
+	if(chunk->size == size)
+		return ptr;
+	
+	//shrink the block
+	if(size < chunk->size){
+		size_t tail = chunk->size - size;
+		chunk->size = size;
+		chunk_list_insert(&dealloced_chunks, chunk->start + size, tail);
+
+		coalesce_free_chunks();
+		
+		return ptr;
+	}
+
+	//expand the block
+	if(size > chunk->size){
+		void* new_block = heap_alloc(size);
+		
+		if(new_block == NULL)
+			return NULL;
+		
+		memcpy(new_block, ptr, chunk->size);
+
+		heap_free(ptr);
+
+		return new_block;
+	}
+
+	return NULL;
+
+}
+
 void heap_free(void* ptr){
 	if(ptr != NULL){
 		const int index = chunk_list_find(&alloced_chunks, ptr); 
@@ -57,9 +103,6 @@ void heap_free(void* ptr){
 		chunk_list_remove(&alloced_chunks, (size_t)index);
 	}
 	
-	//Coalesce
-	Chunk_List merged = {0};
-	chunk_list_merge(&merged, &dealloced_chunks);
-	dealloced_chunks = merged;
+	coalesce_free_chunks();
 }
 
